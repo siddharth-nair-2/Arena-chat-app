@@ -1,0 +1,26 @@
+.messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  margin: 0;
+  max-height: 83vh;
+}
+
+@media only screen and (max-width: 385px) {
+  /* For mobile phones: */
+  .messages {
+    max-height: 75vh;
+    overflow: hidden;
+    scrollbar-width: none;
+  }
+  .message-box-span {
+  }
+}
+@media only screen and (max-width: 480px) {
+  /* For mobile phones: */
+  .messages {
+    max-height: 81vh;
+    overflow: hidden;
+    scrollbar-width: none;
+  }
+}
