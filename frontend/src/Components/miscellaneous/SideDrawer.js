@@ -9,14 +9,12 @@ import {
   DrawerOverlay,
   Input,
   InputGroup,
-  InputRightElement,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Spinner,
   Text,
-  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -37,6 +35,7 @@ import { Effect } from "react-notification-badge";
 import EditIcon from "@mui/icons-material/Edit";
 import BlurOnIcon from "@mui/icons-material/BlurOn";
 import BlurOffIcon from "@mui/icons-material/BlurOff";
+import "./inputStyle.css"
 
 const SideDrawer = ({ fetchAgain, particlesVisible, setParticlesVisible }) => {
   const [search, setSearch] = useState("");

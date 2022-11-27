@@ -13,8 +13,6 @@
     overflow: hidden;
     scrollbar-width: none;
   }
-  .message-box-span {
-  }
 }
 @media only screen and (max-width: 480px) {
   /* For mobile phones: */
