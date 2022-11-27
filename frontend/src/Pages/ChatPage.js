@@ -72,14 +72,14 @@ const ChatPage = () => {
               outModes: {
                 default: "bounce",
               },
-              random: false,
-              speed: 3,
+              random: true,
+              speed: 1,
               straight: false,
             },
             number: {
               density: {
                 enable: true,
-                area: 800,
+                area: 400,
               },
               value: particlesVisible,
             },
@@ -90,7 +90,7 @@ const ChatPage = () => {
               type: "circle",
             },
             size: {
-              value: { min: 1, max: 5 },
+              value: { min: 1, max: 2 },
             },
           },
           detectRetina: true,
