@@ -73,7 +73,7 @@ const ChatPage = () => {
                 default: "bounce",
               },
               random: false,
-              speed: 2,
+              speed: 3,
               straight: false,
             },
             number: {
