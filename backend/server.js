@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// --------------------------------------Deployment------------------------------
+// --------------------------------------Deployment-------------------------------
 
 app.use(notFound);
 app.use(errorHandler);
