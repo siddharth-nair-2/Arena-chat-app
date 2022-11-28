@@ -631,7 +631,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               isRequired
               mt={3}
               position={{base:"fixed", md: "static"}}
-              bottom={{base:"1", md: "none"}}
+              bottom={{base:"0", md: "none"}}
               left={{base:"0", md: "none"}}
             >
               <InputGroup>
