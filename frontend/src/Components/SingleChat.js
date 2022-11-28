@@ -30,6 +30,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 import io from "socket.io-client";
 const ENDPOINT = "https://temp-arena-chat.herokuapp.com/";
+// const ENDPOINT = "http://localhost:5000/";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -243,6 +244,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               padding="10px"
               alignItems="center"
               color="#EBF7E3"
+              position={{base: "fixed", md: "static"}}
+              top={{base: "0", md: "none"}}
+              left={{base: "0", md: "none"}}
               borderBottom="1px solid #1B3409"
             >
               <Box display={{ base: "flex", lg: "none" }}>
