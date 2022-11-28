@@ -277,10 +277,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   }}
                   onClick={onOpenSingleProfileDrawer}
                 />
-                <Box display="flex" flexDirection="column">
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  onClick={onOpenSingleProfileDrawer}
+                  cursor="pointer"
+                  ml={{ base: "3", lg: "10" }}
+                >
                   <Text
                     fontSize={{ base: "22px", md: "24px" }}
-                    pl={{ base: "3", lg: "10" }}
                     pt={2}
                     width="100%"
                     fontWeight={600}
@@ -314,7 +319,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         fontWeight: "normal",
                         fontSize: "12px",
                       }}
-                      pl={{ base: "3", lg: "10" }}
+                      // pl={{ base: "3", lg: "10" }}
                     >
                       typing...
                     </Box>
@@ -325,9 +330,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         fontWeight: "normal",
                         fontSize: "12px",
                       }}
-                      pl={{ base: "3", lg: "10" }}
+                      // pl={{ base: "3", lg: "10" }}
                     >
-                      {getSenderData(user, selectedChat.users).email}
+                      tap here for contact info
                     </Box>
                   )}
                 </Box>
@@ -657,7 +662,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     bg: "#BEE5A4",
                   }}
                   onChange={typingHandler}
-                  onBlur={(e) => setTyping(false)}
+                  onBlur={(e) => {
+                    socket.emit("stop typing", selectedChat._id);
+                    setTyping(false);
+                  }}
                   value={newMessage}
                 />
                 <InputRightElement
