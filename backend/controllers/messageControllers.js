@@ -4,9 +4,10 @@ const Message = require("../Models/messageModel");
 const User = require("../Models/userModel");
 
 const sendMessage = asyncHandler(async (req, res) => {
-  const { content, chatId } = req.body;
+  const { content, chatId, contentType, fileContent, mimeType, fileName } =
+    req.body;
 
-  if (!content || !chatId) {
+  if (!content || !chatId ) {
     console.log("Invalid data passed!");
     return res.sendStatus(400);
   }
@@ -14,6 +15,10 @@ const sendMessage = asyncHandler(async (req, res) => {
   let newMessage = {
     sender: req.user._id,
     content: content,
+    contentType: contentType,
+    fileContent: fileContent,
+    mimeType: mimeType,
+    fileName: fileName,
     chat: chatId,
   };
 

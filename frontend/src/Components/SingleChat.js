@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -10,6 +9,7 @@ import {
   Image,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
   Spinner,
   Text,
@@ -25,8 +25,9 @@ import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import "./styles.css";
 import ScrollableChat from "./ScrollableChat";
 import axios from "axios";
-import animationData from "../animations/typing.json";
 import SendIcon from "@mui/icons-material/Send";
+import ImageIcon from "@mui/icons-material/Image";
+import CloseIcon from "@mui/icons-material/Close";
 
 import io from "socket.io-client";
 const ENDPOINT = "https://temp-arena-chat.herokuapp.com/";
@@ -36,20 +37,12 @@ let socket, selectedChatCompare;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState();
+  const [newMessage, setNewMessage] = useState("");
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
-  const [sendUsingClick, setSendUsingClick] = useState(false);
-
-  const defaultOptionsAnimation = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  const [file, setFile] = useState();
+  const [uploadPic, setUploadPic] = useState();
 
   const toast = useToast();
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
@@ -138,73 +131,197 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
   });
 
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Invalid picture",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "Arena-chat");
+      data.append("cloud_name", "dvqdfodqz");
+      fetch("https://api.cloudinary.com/v1_1/dvqdfodqz/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUploadPic(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Invalid picture",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+  };
+
   const sendMessageUsingClick = async (event) => {
     if (newMessage) {
-      socket.emit("stop typing", selectedChat._id);
-      try {
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({
-            content: newMessage,
-            chatId: selectedChat._id,
-          }),
-        };
-        setNewMessage("");
-        fetch("/api/message", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            socket.emit("new message", data);
-            setMessages([...messages, data]);
-            setFetchAgain(!fetchAgain);
+      if (file) {
+        console.log("file exists");
+        socket.emit("stop typing", selectedChat._id);
+        try {
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              content: newMessage,
+              contentType: "file",
+              fileContent: uploadPic,
+              mimeType: file.type,
+              fileName: file.name,
+              chatId: selectedChat._id,
+            }),
+          };
+          setNewMessage("");
+          setFile();
+          fetch("/api/message", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              socket.emit("new message", data);
+              setMessages([...messages, data]);
+              setFetchAgain(!fetchAgain);
+            });
+        } catch (error) {
+          toast({
+            title: "Error!",
+            description: error.message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-left",
           });
-      } catch (error) {
-        toast({
-          title: "Error!",
-          description: error.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-          position: "bottom-left",
-        });
+        }
+      } else {
+        console.log("file doesn't exist");
+        socket.emit("stop typing", selectedChat._id);
+        try {
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              content: newMessage,
+              chatId: selectedChat._id,
+            }),
+          };
+          setNewMessage("");
+          fetch("/api/message", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              socket.emit("new message", data);
+              setMessages([...messages, data]);
+              setFetchAgain(!fetchAgain);
+            });
+        } catch (error) {
+          toast({
+            title: "Error!",
+            description: error.message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        }
       }
     }
   };
   const sendMessage = async (event) => {
-    if ((event.key === "Enter" || sendUsingClick) && newMessage) {
-      socket.emit("stop typing", selectedChat._id);
-      try {
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({
-            content: newMessage,
-            chatId: selectedChat._id,
-          }),
-        };
-        setNewMessage("");
-        fetch("/api/message", requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            socket.emit("new message", data);
-            setMessages([...messages, data]);
-            setFetchAgain(!fetchAgain);
+    if (event.key === "Enter" && newMessage) {
+      if (file) {
+        console.log("file exists");
+        socket.emit("stop typing", selectedChat._id);
+        try {
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              content: newMessage,
+              contentType: "file",
+              fileContent: uploadPic,
+              mimeType: file.type,
+              fileName: file.name,
+              chatId: selectedChat._id,
+            }),
+          };
+          setNewMessage("");
+          setFile();
+          fetch("/api/message", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              socket.emit("new message", data);
+              setMessages([...messages, data]);
+              setFetchAgain(!fetchAgain);
+            });
+        } catch (error) {
+          toast({
+            title: "Error!",
+            description: error.message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-left",
           });
-      } catch (error) {
-        toast({
-          title: "Error!",
-          description: error.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-          position: "bottom-left",
-        });
+        }
+      } else {
+        console.log("file doesn't exist");
+        socket.emit("stop typing", selectedChat._id);
+        try {
+          const requestOptions = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              content: newMessage,
+              chatId: selectedChat._id,
+            }),
+          };
+          setNewMessage("");
+          fetch("/api/message", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+              socket.emit("new message", data);
+              setMessages([...messages, data]);
+              setFetchAgain(!fetchAgain);
+            });
+        } catch (error) {
+          toast({
+            title: "Error!",
+            description: error.message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        }
       }
     }
   };
@@ -230,6 +347,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setTyping(false);
       }
     }, timerLength);
+  };
+
+  const selectFile = (e) => {
+    if (e) {
+      setNewMessage(e.target.files[0].name);
+      setFile(e.target.files[0]);
+      postDetails(e.target.files[0]);
+    }
   };
 
   return (
@@ -298,20 +423,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   >
                     {getSender(user, selectedChat.users)}
                   </Text>
-                  {/* <Text
-                    fontSize={{ base: "12px", md: "16px" }}
-                    pl={{ base: "3", lg: "10" }}
-                    pt={2}
-                    width="100%"
-                    height="100%"
-                    fontFamily="'Poppins', sans-serif"
-                    display="flex"
-                    alignItems="center"
-                    color="arenaColors.100"
-                    justifyContent="space-between"
-                  >
-                    {getSenderData(user, selectedChat.users).email}
-                  </Text> */}
                   {isTyping ? (
                     <Box
                       style={{
@@ -645,12 +756,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
             <FormControl
-              onKeyDown={sendMessage}
               isRequired
               mt={3}
               position={{ base: "fixed", md: "static" }}
               bottom={{ base: "0", md: "none" }}
               left={{ base: "0", md: "none" }}
+              onKeyDown={sendMessage}
             >
               <InputGroup>
                 <Input
@@ -668,6 +779,49 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   }}
                   value={newMessage}
                 />
+                {!file ? (
+                  <InputLeftElement
+                    className="upload-image-input"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    pt="6px"
+                  >
+                    <input
+                      id="chat-upload-pic"
+                      onChange={selectFile}
+                      type="file"
+                      accept="image/*"
+                    />
+                    <label
+                      htmlFor="chat-upload-pic"
+                      style={{ color: "#1B3409" }}
+                    >
+                      <ImageIcon
+                        size="large"
+                        color="INHERIT"
+                        cursor="pointer"
+                      ></ImageIcon>
+                    </label>
+                  </InputLeftElement>
+                ) : (
+                  <InputLeftElement
+                    className="upload-image-input"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    onClick={(e) => {
+                      setNewMessage("");
+                      setFile();
+                    }}
+                  >
+                    <CloseIcon
+                      size="large"
+                      color="INHERIT"
+                      cursor="pointer"
+                    ></CloseIcon>
+                  </InputLeftElement>
+                )}
                 <InputRightElement
                   cursor="pointer"
                   onClick={sendMessageUsingClick}
