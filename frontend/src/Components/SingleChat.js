@@ -220,7 +220,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
 
     let lastTypingTime = new Date().getTime();
-    let timerLength = 1500;
+    let timerLength = 3000;
     setTimeout(() => {
       let timeNow = new Date().getTime();
       let timeDiff = timeNow - lastTypingTime;
