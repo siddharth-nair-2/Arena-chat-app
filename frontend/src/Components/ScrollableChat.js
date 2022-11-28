@@ -143,7 +143,7 @@ const ScrollableChat = ({ messages }) => {
                     {m.sender.name}
                   </span>
                 )}
-              {m.fileContent !== m.fileName && m.content}
+              {(m.content !== m.fileName) && m.content}
               <ImageFile fileName={m.fileName} imageSrc={m.fileContent} />
               <Moment
                 format="HH:mm"
