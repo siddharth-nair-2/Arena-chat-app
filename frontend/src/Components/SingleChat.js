@@ -148,7 +148,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       pics.type === "image/jpeg" ||
       pics.type === "image/png" ||
       pics.type === "image/tiff" ||
-      pics.type === "image/heif"
+      pics.type === "image/heic"
     ) {
       const data = new FormData();
       data.append("file", pics);
