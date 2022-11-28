@@ -13,10 +13,18 @@ import {
 import { ChatState } from "../Context/ChatProvider";
 import Moment from "react-moment";
 import { Box } from "@chakra-ui/react";
-import ImageFile from "./ImageFile";
+import { useState } from "react";
+import Modal from "react-modal";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   const renderMessages = (m, i) => {
     if (m.contentType === "file") {
@@ -143,8 +151,16 @@ const ScrollableChat = ({ messages }) => {
                     {m.sender.name}
                   </span>
                 )}
-              {(m.content !== m.fileName) && m.content}
-              <ImageFile fileName={m.fileName} imageSrc={m.fileContent} />
+              {m.content !== m.fileName && m.content}
+              <img
+                style={{ width: 150, height: "auto" }}
+                src={m.fileContent}
+                alt={m.fileName}
+                onClick={() => {
+                  setModalData(m);
+                  setModalIsOpen(true);
+                }}
+              />
               <Moment
                 format="HH:mm"
                 trim
@@ -306,11 +322,48 @@ const ScrollableChat = ({ messages }) => {
   };
 
   return (
-    <ScrollableFeed>
-      <Box marginBottom={{ base: "50px", md: "0" }}>
-        {messages && messages.map(renderMessages)}
-      </Box>
-    </ScrollableFeed>
+    <>
+      <ScrollableFeed>
+        <Box marginBottom={{ base: "50px", md: "0" }}>
+          {messages && messages.map(renderMessages)}
+        </Box>
+      </ScrollableFeed>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        ariaHideApp={false}
+        closeOnOverlayClick={true}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+          },
+          content: {
+            background: "transparent",
+            overflow: "auto",
+            WebkitOverflowScrolling: "touch",
+            padding: "20px",
+            border: "none",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        }}
+      >
+        <Box onClick={closeModal} color="white" fontSize="30px" display="flex" ml="auto" mb="auto">
+          <CloseIcon
+            fontSize="inherit"
+            color="INHERIT"
+            cursor="pointer"
+          ></CloseIcon>
+        </Box>
+        <img
+          style={{ maxWidth: "700px", maxHeight: "800px" }}
+          src={modalData?.fileContent}
+          alt={modalData?.fileName}
+        />
+      </Modal>
+    </>
   );
 };
 

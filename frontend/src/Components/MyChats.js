@@ -49,7 +49,6 @@ const MyChats = ({ fetchAgain, chatListFilter }) => {
       bg="white"
       w={{ base: "100%" }}
       h="75%"
-      zIndex="0"
       backgroundColor="#66B032"
       borderRadius="1g"
     >

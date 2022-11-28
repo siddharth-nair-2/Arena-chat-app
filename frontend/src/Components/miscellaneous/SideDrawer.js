@@ -478,7 +478,6 @@ const SideDrawer = ({ fetchAgain, particlesVisible, setParticlesVisible }) => {
             marginLeft: "10px",
             marginRight: "10px",
             position: "relative",
-            zIndex: "1",
           }}
         >
           <Button variant="ghost" cursor="default" _hover={{ bg: "#B3D79A" }}>
