@@ -52,11 +52,9 @@ const Register = () => {
         .then((data) => {
           setPic(data.url.toString());
           setProfilePic(data.url.toString());
-          console.log(data.url.toString());
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           setLoading(false);
         });
     } else {
@@ -131,7 +129,7 @@ const Register = () => {
       window.location.reload();
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: `${error.response.data.message}`,
         status: "error",
         duration: 4000,
         isClosable: true,

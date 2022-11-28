@@ -68,7 +68,7 @@ const Login = () => {
       window.location.reload();
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: `${error.response.data.message}`,
         status: "error",
         duration: 4000,
         isClosable: true,

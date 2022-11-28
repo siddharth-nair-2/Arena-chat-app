@@ -93,8 +93,6 @@ const MyChats = ({ fetchAgain, chatListFilter }) => {
           <Stack overflowY="scroll" padding={0}>
             {chats
               ?.filter((singleChat) => {
-                console.log(singleChat);
-                console.log(chatListFilter);
                 return (
                   (singleChat.isGroupChat &&
                     singleChat.chatName
@@ -107,7 +105,7 @@ const MyChats = ({ fetchAgain, chatListFilter }) => {
                 );
               })
               .map((chat) => (
-                <div key={chat._id}>
+                <div key={chat._id} >
                   <Box
                     onClick={() => setSelectedChat(chat)}
                     cursor="pointer"
@@ -129,6 +127,8 @@ const MyChats = ({ fetchAgain, chatListFilter }) => {
                         style={{
                           height: "60px",
                           width: "60px",
+                          minWidth: "60px",
+                          minHeight: "60px",
                           objectFit: "cover",
                           borderRadius: "50%",
                           cursor: "pointer",
@@ -141,6 +141,8 @@ const MyChats = ({ fetchAgain, chatListFilter }) => {
                         style={{
                           height: "60px",
                           width: "60px",
+                          minWidth: "60px",
+                          minHeight: "60px",
                           objectFit: "cover",
                           borderRadius: "50%",
                           cursor: "pointer",

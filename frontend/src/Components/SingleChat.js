@@ -626,7 +626,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <ScrollableChat messages={messages} />
               </div>
             )}
-            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+            <FormControl
+              onKeyDown={sendMessage}
+              isRequired
+              mt={3}
+              position={{base:"fixed", md: "static"}}
+              bottom={{base:"1", md: "none"}}
+              left={{base:"0", md: "none"}}
+            >
               <InputGroup>
                 <Input
                   variant="filled"

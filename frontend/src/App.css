@@ -84,3 +84,11 @@
   text-align: center;
 }
 
+.profilepic__content input[type="file"] {
+  width: 0;
+  height: 0;
+  z-index: -1;
+  position: absolute;
+  overflow: hidden;
+  opacity: 0;
+}

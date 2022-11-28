@@ -35,7 +35,6 @@ import { Effect } from "react-notification-badge";
 import EditIcon from "@mui/icons-material/Edit";
 import BlurOnIcon from "@mui/icons-material/BlurOn";
 import BlurOffIcon from "@mui/icons-material/BlurOff";
-import "./inputStyle.css"
 
 const SideDrawer = ({ fetchAgain, particlesVisible, setParticlesVisible }) => {
   const [search, setSearch] = useState("");
@@ -108,7 +107,6 @@ const SideDrawer = ({ fetchAgain, particlesVisible, setParticlesVisible }) => {
         },
         config
       );
-      console.log(data);
       let tempToken = user.token;
       localStorage.setItem(
         "userInfo",
@@ -163,10 +161,8 @@ const SideDrawer = ({ fetchAgain, particlesVisible, setParticlesVisible }) => {
           setLoading(false);
         })
         .then(() => {
-          console.log(pic, profilePic);
         })
         .catch((err) => {
-          console.log(err);
           setLoading(false);
         });
     } else {

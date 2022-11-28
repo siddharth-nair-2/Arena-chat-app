@@ -52,7 +52,6 @@ const GroupChatModal = ({ children }) => {
         requestOptions
       );
       const data = await response.json();
-      console.log(data);
       setLoading(false);
       setSearchResults(data);
     } catch (error) {
@@ -94,7 +93,6 @@ const GroupChatModal = ({ children }) => {
       const response = await fetch(`/api/chat/group`, requestOptions);
       const data = await response.json();
       setChats([data], ...chats);
-      console.log(chats);
       onClose();
 
       toast({
