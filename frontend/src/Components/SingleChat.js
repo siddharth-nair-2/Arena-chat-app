@@ -220,7 +220,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
 
     let lastTypingTime = new Date().getTime();
-    let timerLength = 3000;
+    let timerLength = 2000;
     setTimeout(() => {
       let timeNow = new Date().getTime();
       let timeDiff = timeNow - lastTypingTime;
@@ -244,9 +244,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               padding="10px"
               alignItems="center"
               color="#EBF7E3"
-              position={{base: "fixed", md: "static"}}
-              top={{base: "0", md: "none"}}
-              left={{base: "0", md: "none"}}
+              position={{ base: "fixed", md: "static" }}
+              top={{ base: "0", md: "none" }}
+              left={{ base: "0", md: "none" }}
               borderBottom="1px solid #1B3409"
             >
               <Box display={{ base: "flex", lg: "none" }}>
@@ -319,7 +319,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                       typing...
                     </Box>
                   ) : (
-                    <></>
+                    <Box
+                      style={{
+                        fontStyle: "italic",
+                        fontWeight: "normal",
+                        fontSize: "12px",
+                      }}
+                      pl={{ base: "3", lg: "10" }}
+                    >
+                      {getSenderData(user, selectedChat.users).email}
+                    </Box>
                   )}
                 </Box>
               </Box>
@@ -634,9 +643,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onKeyDown={sendMessage}
               isRequired
               mt={3}
-              position={{base:"fixed", md: "static"}}
-              bottom={{base:"0", md: "none"}}
-              left={{base:"0", md: "none"}}
+              position={{ base: "fixed", md: "static" }}
+              bottom={{ base: "0", md: "none" }}
+              left={{ base: "0", md: "none" }}
             >
               <InputGroup>
                 <Input
@@ -648,7 +657,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     bg: "#BEE5A4",
                   }}
                   onChange={typingHandler}
-                  onBlur={typingHandler}
+                  onBlur={(e) => setTyping(false)}
                   value={newMessage}
                 />
                 <InputRightElement
