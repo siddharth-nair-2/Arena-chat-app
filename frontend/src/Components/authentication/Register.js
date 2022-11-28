@@ -88,6 +88,18 @@ const Register = () => {
       setLoading(false);
       return;
     }
+    if(password.length < 8){
+      toast({
+        title: "Password should be at least 8 characters!",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+
+    }
     if (password !== confirmPassword) {
       toast({
         title: "Your passwords do not match!",
@@ -99,6 +111,20 @@ const Register = () => {
       setLoading(false);
       return;
     }
+
+    if(name.length > 15){
+      toast({
+        title: "The name should not have more than 15 characters!",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+
+    }
+
     const emailRegex = new RegExp(
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       "gm"
