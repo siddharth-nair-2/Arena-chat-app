@@ -738,7 +738,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           )}
           <Box
             display="flex"
-            justifyContent="flex-end"
+            justifyContent="center"
             p={3}
             w="100%"
             height="100%"
