@@ -26,6 +26,7 @@ const Register = () => {
   );
   const toast = useToast();
   const history = useHistory();
+
   const postDetails = (pics) => {
     setLoading(true);
     if (pics === undefined) {
@@ -98,7 +99,21 @@ const Register = () => {
       setLoading(false);
       return;
     }
-
+    const emailRegex = new RegExp(
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "gm"
+    );
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Your email has an invalid format!",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
     try {
       const config = {
         Headers: {
